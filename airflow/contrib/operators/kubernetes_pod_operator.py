@@ -109,6 +109,8 @@ class KubernetesPodOperator(BaseOperator):  # pylint: disable=too-many-instance-
     :type dnspolicy: str
     :param full_pod_spec: The complete podSpec
     :type full_pod_spec: kubernetes.client.models.V1Pod
+    :param init_containers: init container for the launched Pod
+    :type init_containers: list[airflow.kubernetes.init_container.InitContainer]
     """
     template_fields = ('cmds', 'arguments', 'env_vars', 'config_file')
 
@@ -147,6 +149,7 @@ class KubernetesPodOperator(BaseOperator):  # pylint: disable=too-many-instance-
             pod = append_to_pod(pod, self.volumes)
             pod = append_to_pod(pod, self.volume_mounts)
             pod = append_to_pod(pod, self.secrets)
+            pod = append_to_pod(pod, self.init_containers)
 
             self.pod = pod
 
@@ -205,6 +208,7 @@ class KubernetesPodOperator(BaseOperator):  # pylint: disable=too-many-instance-
                  pod_runtime_info_envs=None,
                  dnspolicy=None,
                  full_pod_spec=None,
+                 init_containers=None,
                  *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
@@ -245,3 +249,4 @@ class KubernetesPodOperator(BaseOperator):  # pylint: disable=too-many-instance-
         self.pod_runtime_info_envs = pod_runtime_info_envs or []
         self.dnspolicy = dnspolicy
         self.full_pod_spec = full_pod_spec
+        self.init_containers = init_containers or []
