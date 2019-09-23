@@ -79,7 +79,6 @@ class TestKubernetesPodOperator(unittest.TestCase):
                 }],
                 'hostNetwork': False,
                 'imagePullSecrets': [],
-                'initContainers': [],
                 'nodeSelector': {},
                 'restartPolicy': 'Never',
                 'securityContext': {},
